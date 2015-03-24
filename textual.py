@@ -158,6 +158,10 @@ def generateTextualStyles(filename, settings):
 def main():
 	parser = ArgumentParser()
 	parser.add_argument(
+		'-s', '--scheme',
+		action = 'store',
+	)
+	parser.add_argument(
 		'-i', '--install',
 		action = 'store_true',
 		default = False,
@@ -188,7 +192,13 @@ def main():
 		preview = args.preview,
 	)
 
-	iterateFiles(config_path, generateTextualStyles, settings)
+	if args.scheme:
+		scheme = os.path.expanduser(args.scheme)
+		if not os.path.exists(scheme):
+			fatal("No such file: '%s'" % scheme)
+		generateTextualStyles(scheme, settings)
+	else:
+		iterateFiles(config_path, generateTextualStyles, settings)
 
 copyright_txt = """\
 Scheme: {title}
