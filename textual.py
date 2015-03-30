@@ -24,11 +24,8 @@ def copyFile(fromPath, toPath, filename):
 	shutil.copy(os.path.join(fromPath, filename), os.path.join(toPath, filename))
 
 class Base16:
-	def __init__(self, configfile, variant):
+	def __init__(self, config, variant):
 		lvariant = variant.lower()
-		parser = SafeConfigParser()
-		parser.read(configfile)
-		config = parser._sections['base16']
 
 		self.variant = variant
 		self.author = config['author']
@@ -169,10 +166,44 @@ def generateTextualStyles(filename, settings):
 	if not filename.endswith('.cfg'):
 		return
 
+	config = B16TConfigParser(filename)
+
 	if settings.light:
-		generateTextualStyle(Base16(filename, 'Light'), settings)
+		generateTextualStyle(Base16(config['base16'], 'Light'), settings)
 	if settings.dark:
-		generateTextualStyle(Base16(filename, 'Dark'), settings)
+		generateTextualStyle(Base16(config['base16'], 'Dark'), settings)
+
+def B16TConfigParser(configfile):
+	if not os.path.exists(configfile):
+		fatal("Missing config file: '%s'" % configfile)
+
+	required_options = {
+		'base16' : [
+			'author',
+			'scheme',
+			'base00', 'base01', 'base02', 'base03',
+			'base04', 'base05', 'base06', 'base07',
+			'base08', 'base09', 'base0A', 'base0B',
+			'base0C', 'base0D', 'base0E', 'base0F',
+		]
+	}
+
+	parser = SafeConfigParser()
+	parser.read(configfile)
+	for section in required_options:
+		if not parser.has_section(section):
+			fatal(
+				"Missing section '%s' in config file: '%s'"
+				% (section, configfile)
+			)
+		for option in required_options[section]:
+			if not parser.has_option(section, option):
+				fatal(
+					"Missing option '%s' in section '%s' in config file: '%s'"
+					% (option, section, configfile)
+				)
+
+	return parser._sections
 
 def B16TArgumentParser():
 	parser = ArgumentParser(
