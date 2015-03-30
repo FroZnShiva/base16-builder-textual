@@ -174,7 +174,7 @@ def generateTextualStyles(filename, settings):
 	if settings.dark:
 		generateTextualStyle(Base16(filename, 'Dark'), settings)
 
-def main():
+def B16TArgumentParser():
 	parser = ArgumentParser(
 		description = """
 			This is a script which generates styles for the Textual IRC client
@@ -237,6 +237,10 @@ def main():
 		action = 'store_true',
 		default = False,
 	)
+	return parser
+
+def main():
+	parser = B16TArgumentParser()
 	args = parser.parse_args()
 
 	output_path = 'output'
