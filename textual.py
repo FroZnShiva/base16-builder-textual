@@ -170,25 +170,48 @@ def generateTextualStyles(filename, settings):
 	generateTextualStyle(Base16(filename, 'Dark'), settings)
 
 def main():
-	parser = ArgumentParser()
+	parser = ArgumentParser(
+		description = """
+			This is a script which generates styles for the Textual IRC client
+			based on the colour schemes of Base16 by chriskempson and the
+			default Simplified style bundled with Textual.
+		""",
+	)
 	parser.add_argument(
 		'--default-irc-colours',
-		help = 'This option disables replacing the default IRC colours used by Textual.',
+		help = """
+			This option disables replacing the default IRC colours to fit with 
+			the Style. This means that the default IRC colours defined by
+			Textual are used.
+		""",
 		action = 'store_true',
 		default = False,
 	)
 	parser.add_argument(
 		'-s', '--scheme',
+		help = """
+			Generate the style for a given scheme only. If this option is not
+			given, styles for all Base16 schemes are generated. The schemes are
+			stored in the 'schemes' subdirectory.
+		""",
 		action = 'store',
 	)
 	parser.add_argument(
 		'-i', '--install',
+		help = """
+			This installs the generated style(s) directly into the location
+			where the Textual styles are stored. If this is not set, the
+			generated styles will be stored in the 'output' subdirectory.
+		""",
 		action = 'store_true',
 		default = False,
 	)
 	parser.add_argument(
 		'-p', '--preview',
-		help = 'Generate preview files',
+		help = """
+			If this is enabled preview files will be generated for each style.
+			Usually you don't want to enable this.
+		""",
 		action = 'store_true',
 		default = False,
 	)
