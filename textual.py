@@ -123,12 +123,13 @@ class Base16:
 		f.close()
 
 class Settings:
-	def __init__(self, output_path, preview, default_irc_colours, light, dark):
-		self.output_path = output_path
-		self.preview = preview
-		self.default_irc_colours = default_irc_colours
-		self.light = light
-		self.dark = dark
+	__slots__ = [
+		'output_path',
+		'preview',
+		'default_irc_colours',
+		'light',
+		'dark',
+	]
 
 def generateTextualStyle(base16, settings):
 	path = os.path.join(settings.output_path, base16.title)
@@ -252,13 +253,12 @@ def main():
 		os.makedirs(output_path)
 
 	neither = not (args.light or args.dark)
-	settings = Settings(
-		output_path = output_path,
-		preview = args.preview,
-		default_irc_colours = args.default_irc_colours,
-		light = args.light or neither,
-		dark = args.dark or neither,
-	)
+	settings = Settings()
+	settings.output_path = output_path
+	settings.preview = args.preview
+	settings.default_irc_colours = args.default_irc_colours
+	settings.light = args.light or neither
+	settings.dark = args.dark or neither
 
 	if args.scheme:
 		scheme = os.path.expanduser(args.scheme)
