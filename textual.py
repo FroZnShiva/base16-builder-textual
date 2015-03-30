@@ -123,10 +123,12 @@ class Base16:
 		f.close()
 
 class Settings:
-	def __init__(self, output_path, preview, default_irc_colours):
+	def __init__(self, output_path, preview, default_irc_colours, light, dark):
 		self.output_path = output_path
 		self.preview = preview
 		self.default_irc_colours = default_irc_colours
+		self.light = light
+		self.dark = dark
 
 def generateTextualStyle(base16, settings):
 	path = os.path.join(settings.output_path, base16.title)
@@ -166,8 +168,10 @@ def generateTextualStyles(filename, settings):
 	if not filename.endswith('.cfg'):
 		return
 
-	generateTextualStyle(Base16(filename, 'Light'), settings)
-	generateTextualStyle(Base16(filename, 'Dark'), settings)
+	if settings.light:
+		generateTextualStyle(Base16(filename, 'Light'), settings)
+	if settings.dark:
+		generateTextualStyle(Base16(filename, 'Dark'), settings)
 
 def main():
 	parser = ArgumentParser(
@@ -176,6 +180,23 @@ def main():
 			based on the colour schemes of Base16 by chriskempson and the
 			default Simplified style bundled with Textual.
 		""",
+	)
+	variantGrp = parser.add_argument_group('variants')
+	variantGrp.add_argument(
+		'-l', '--light',
+		help = """
+			Only generate the light variant.
+		""",
+		action = 'store_true',
+		default = False,
+	)
+	variantGrp.add_argument(
+		'-d', '--dark',
+		help = """
+			Only generate the dark variant.
+		""",
+		action = 'store_true',
+		default = False,
 	)
 	parser.add_argument(
 		'--default-irc-colours',
@@ -230,10 +251,13 @@ def main():
 	if not os.path.exists(output_path):
 		os.makedirs(output_path)
 
+	neither = not (args.light or args.dark)
 	settings = Settings(
 		output_path = output_path,
 		preview = args.preview,
 		default_irc_colours = args.default_irc_colours,
+		light = args.light or neither,
+		dark = args.dark or neither,
 	)
 
 	if args.scheme:
