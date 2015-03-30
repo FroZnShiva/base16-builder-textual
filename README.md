@@ -17,7 +17,7 @@ cd base16-builder-textual
 
 Generate the styles by running:
 ```sh
-./textual.py
+./base16-textual
 ```
 The styles are stored in the `output` directory by default.
 
@@ -25,5 +25,5 @@ The styles are stored in the `output` directory by default.
 
 See available features by viewing the integrated help:
 ```sh
-./textual.py --help
+./base16-textual --help
 ```
