@@ -123,9 +123,10 @@ class Base16:
 		f.close()
 
 class Settings:
-	def __init__(self, output_path, preview):
+	def __init__(self, output_path, preview, default_irc_colours):
 		self.output_path = output_path
 		self.preview = preview
+		self.default_irc_colours = default_irc_colours
 
 def generateTextualStyle(base16, settings):
 	path = os.path.join(settings.output_path, base16.title)
@@ -140,8 +141,12 @@ def generateTextualStyle(base16, settings):
 	os.makedirs(settings_path)
 	os.makedirs(template_path)
 
+	design_css_data = design_css
+	if not settings.default_irc_colours:
+		design_css_data += irc_colours_css
+
 	base16.write(path, 'copyright.txt', copyright_txt)
-	base16.write(path, 'design.css', design_css)
+	base16.write(path, 'design.css', design_css_data)
 	base16.write(settings_path, 'styleSettings.plist', stylesettings_plist)
 
 	files_to_copy = [
@@ -166,6 +171,12 @@ def generateTextualStyles(filename, settings):
 
 def main():
 	parser = ArgumentParser()
+	parser.add_argument(
+		'--default-irc-colours',
+		help = 'This option disables replacing the default IRC colours used by Textual.',
+		action = 'store_true',
+		default = False,
+	)
 	parser.add_argument(
 		'-s', '--scheme',
 		action = 'store',
@@ -199,6 +210,7 @@ def main():
 	settings = Settings(
 		output_path = output_path,
 		preview = args.preview,
+		default_irc_colours = args.default_irc_colours,
 	)
 
 	if args.scheme:
@@ -773,9 +785,9 @@ div[mtype*=myself] {{
 }}
 
 /* @end */
+"""
 
-/* @group mIRC Color Codes */
-
+irc_colours_css = """
 /* @group Foreground Colors */
 .effect[color-number='0']  {{ color: #{base07fixed}   !important; }} /* White       */
 .effect[color-number='1']  {{ color: #{base00fixed}   !important; }} /* Black       */
@@ -812,8 +824,6 @@ div[mtype*=myself] {{
 .effect[bgcolor-number='13'] {{ background-color: rgba({base0Er}, {base0Eg}, {base0Eb}, 0.8) !important;}} /* Pink        */
 .effect[bgcolor-number='14'] {{ background-color: #{base02fixed}   !important;}} /* Gray        */
 .effect[bgcolor-number='15'] {{ background-color: #{base05fixed}   !important;}} /* Light Gray  */
-/* @end */
-
 /* @end */
 """
 
