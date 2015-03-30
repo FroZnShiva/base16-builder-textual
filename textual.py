@@ -815,8 +815,6 @@ div[mtype*=myself] {{
 /* @end */
 
 /* @end */
-
-/* vim: set foldmethod=marker foldmarker=@group,@end nofoldenable: */
 """
 
 stylesettings_plist = """\
