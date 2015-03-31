@@ -7,6 +7,13 @@ This is a script which generates styles for the [Textual IRC client](http://www.
 This repository is for someone who wants to customize the styles. If you just want to use the styles in their default configuration, you can use the ready-to-use styles at [base16-textual](https://github.com/FroZnShiva/base16-textual).
 You can also see previews of the styles there.
 
+## Requirements
+
+* [python-scss](https://github.com/pistolero/python-scss)
+```sh
+pip install sass
+```
+
 ## Usage
 
 Clone the repository and switch into it:
