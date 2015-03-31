@@ -4,7 +4,7 @@
 import os
 import sys
 import shutil
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentTypeError
 from ConfigParser import SafeConfigParser
 
 def printerror(msg):
@@ -48,6 +48,8 @@ class Base16:
 		self.base0E = config['base0e'] # Purple
 		self.base0F = config['base0f'] # Brown
 
+		self.background_opacity = config.background_opacity
+
 		if lvariant == 'dark':
 			self.base00v = self.base07
 			self.base01v = self.base06
@@ -78,6 +80,7 @@ class Base16:
 			scheme = self.scheme,
 			title = self.title,
 			variant = self.variant,
+			bgtrans = self.background_opacity,
 
 			base00 = self.base00v, base00fixed = self.base00,
 			base01 = self.base01v, base01fixed = self.base01,
@@ -126,6 +129,7 @@ class Settings:
 		'default_irc_colours',
 		'light',
 		'dark',
+		'background_opacity',
 	]
 
 def generateTextualStyle(base16, settings):
@@ -166,12 +170,14 @@ def generateTextualStyles(filename, settings):
 	if not filename.endswith('.cfg'):
 		return
 
-	config = B16TConfigParser(filename)
+	config = B16TConfigParser(filename)['base16']
+
+	config.background_opacity = settings.background_opacity
 
 	if settings.light:
-		generateTextualStyle(Base16(config['base16'], 'Light'), settings)
+		generateTextualStyle(Base16(config, 'Light'), settings)
 	if settings.dark:
-		generateTextualStyle(Base16(config['base16'], 'Dark'), settings)
+		generateTextualStyle(Base16(config, 'Dark'), settings)
 
 def B16TConfigParser(configfile):
 	if not os.path.exists(configfile):
@@ -206,6 +212,13 @@ def B16TConfigParser(configfile):
 	return parser._sections
 
 def B16TArgumentParser():
+	def percentage(arg):
+		value = int(arg)
+		if not (0 <= value <= 100):
+			msg = "%r needs to be a value between 0 and 100" % arg
+			raise ArgumentTypeError(msg)
+		return value / 100.0
+
 	parser = ArgumentParser(
 		description = """
 			This is a script which generates styles for the Textual IRC client
@@ -239,6 +252,19 @@ def B16TArgumentParser():
 		""",
 		action = 'store_true',
 		default = False,
+	)
+	parser.add_argument(
+		'--background-opacity',
+		help = """
+			Set the opacity of background colours of coloured lines. Setting
+			this to 0 will disable background colours for lines. Setting this
+			above 75 might result in unreadable text of the same colour, ie.
+			own messages have the same background colour as the own nick but is
+			less opaque to distinct.
+		""",
+		type = percentage,
+		action = 'store',
+		default = 0.2,
 	)
 	parser.add_argument(
 		'-s', '--scheme',
@@ -294,6 +320,7 @@ def main():
 	settings.default_irc_colours = args.default_irc_colours
 	settings.light = args.light or neither
 	settings.dark = args.dark or neither
+	settings.background_opacity = args.background_opacity
 
 	if args.scheme:
 		scheme = os.path.expanduser(args.scheme)
@@ -535,7 +562,7 @@ div[id=mark] {{
 .line[ltype*=wallops] {{
 	color: #{base0A};
 	z-index: 191;
-	background-color: rgba({base0Ar}, {base0Ag}, {base0Ab}, 0.1);
+	background-color: rgba({base0Ar}, {base0Ag}, {base0Ab}, {bgtrans});
 	position: relative;
 }}
 
@@ -552,7 +579,7 @@ div[id=mark] {{
 	transition: background-color 0.5s;
 	z-index: 190;
 	position: relative;
-	background-color: rgba({base09r}, {base09g}, {base09b}, 0.1);
+	background-color: rgba({base09r}, {base09g}, {base09b}, {bgtrans});
 }}
 
 /* @end */
@@ -564,7 +591,7 @@ div[id=mark] {{
 	z-index: 191;
 	position: relative;
 	font-weight: normal;
-	background-color: rgba({base08r}, {base08g}, {base08b}, 0.1);
+	background-color: rgba({base08r}, {base08g}, {base08b}, {bgtrans});
 }}
 
 div[ltype*=privmsg] .sender {{
@@ -652,7 +679,7 @@ div[ltype*=action] .sender:after {{
 .line[ltype*=topic],
 .line[ltype*=website] {{
 	color: #{base04};
-	background-color: rgba({base06r}, {base06g}, {base06b}, 0.1);
+	background-color: rgba({base06r}, {base06g}, {base06b}, {bgtrans});
 }}
 
 /* Slightly more interesting events */
@@ -660,7 +687,7 @@ div[ltype*=action] .sender:after {{
 .line[ltype*=kill],
 .line[ltype*=mode][command=mode] {{
 	color: #{base02};
-	background-color: rgba({base06r}, {base06g}, {base06b}, 0.1);
+	background-color: rgba({base06r}, {base06g}, {base06b}, {bgtrans});
 }}
 
 /* @group Event Indicators */
@@ -693,7 +720,7 @@ div[ltype*=nick] .message:before {{
 }}
 
 div[mtype*=myself] {{
-	background-color: rgba({base0Dr}, {base0Dg}, {base0Db}, 0.1);
+	background-color: rgba({base0Dr}, {base0Dg}, {base0Db}, {bgtrans});
 }}
 
 /* @end */
