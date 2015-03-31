@@ -126,7 +126,7 @@ class Settings:
 	__slots__ = [
 		'output_path',
 		'preview',
-		'default_irc_colours',
+		'default_irc_colors',
 		'light',
 		'dark',
 		'background_opacity',
@@ -146,8 +146,8 @@ def generateTextualStyle(base16, settings):
 	os.makedirs(template_path)
 
 	design_css_data = design_css
-	if not settings.default_irc_colours:
-		design_css_data += irc_colours_css
+	if not settings.default_irc_colors:
+		design_css_data += irc_colors_css
 
 	base16.write(path, 'copyright.txt', copyright_txt)
 	base16.write(path, 'design.css', design_css_data)
@@ -222,7 +222,7 @@ def B16TArgumentParser():
 	parser = ArgumentParser(
 		description = """
 			This is a script which generates styles for the Textual IRC client
-			based on the colour schemes of Base16 by chriskempson and the
+			based on the color schemes of Base16 by chriskempson and the
 			default Simplified style bundled with Textual.
 		""",
 	)
@@ -244,10 +244,10 @@ def B16TArgumentParser():
 		default = False,
 	)
 	parser.add_argument(
-		'--default-irc-colours',
+		'--default-irc-colors',
 		help = """
-			This option disables replacing the default IRC colours to fit with
-			the Style. This means that the default IRC colours defined by
+			This option disables replacing the default IRC colors to fit with
+			the Style. This means that the default IRC colors defined by
 			Textual are used.
 		""",
 		action = 'store_true',
@@ -256,10 +256,10 @@ def B16TArgumentParser():
 	parser.add_argument(
 		'--background-opacity',
 		help = """
-			Set the opacity of background colours of coloured lines. Setting
-			this to 0 will disable background colours for lines. Setting this
-			above 75 might result in unreadable text of the same colour, ie.
-			own messages have the same background colour as the own nick but is
+			Set the opacity of background colors of colored lines. Setting
+			this to 0 will disable background colors for lines. Setting this
+			above 75 might result in unreadable text of the same color, ie.
+			own messages have the same background color as the own nick but is
 			less opaque to distinct.
 		""",
 		type = percentage,
@@ -317,7 +317,7 @@ def main():
 	settings = Settings()
 	settings.output_path = output_path
 	settings.preview = args.preview
-	settings.default_irc_colours = args.default_irc_colours
+	settings.default_irc_colors = args.default_irc_colors
 	settings.light = args.light or neither
 	settings.dark = args.dark or neither
 	settings.background_opacity = args.background_opacity
@@ -896,7 +896,7 @@ div[mtype*=myself] {{
 /* @end */
 """
 
-irc_colours_css = """
+irc_colors_css = """
 /* @group Foreground Colors */
 .effect[color-number='0']  {{ color: #{base07fixed}   !important; }} /* White       */
 .effect[color-number='1']  {{ color: #{base00fixed}   !important; }} /* Black       */
