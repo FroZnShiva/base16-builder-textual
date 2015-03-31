@@ -246,7 +246,7 @@ def B16TArgumentParser():
 	parser.add_argument(
 		'--default-irc-colours',
 		help = """
-			This option disables replacing the default IRC colours to fit with 
+			This option disables replacing the default IRC colours to fit with
 			the Style. This means that the default IRC colours defined by
 			Textual are used.
 		""",
