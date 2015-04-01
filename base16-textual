@@ -8,6 +8,7 @@ import re
 import sass
 from argparse import ArgumentParser, ArgumentTypeError
 from ConfigParser import SafeConfigParser
+from plistlib import writePlist, readPlist
 
 def printerror(msg):
 	print >> sys.stderr, msg
@@ -47,6 +48,7 @@ class Base16:
 		self.scheme = '%s %s' % (meta['scheme'], variant)
 		self.title = 'Base16 %s' % self.scheme
 		self.background_opacity = config.background_opacity
+		self.background_color = self.colors[self.color_variant('base07')]
 
 	def color_variant(self, color):
 		lvariant = self.variant.lower()
@@ -67,7 +69,6 @@ class Base16:
 			scheme = self.scheme,
 			title = self.title,
 			variant = self.variant,
-			base07 = self.colors[self.color_variant('base07')],
 		)
 
 	def sass_header(self):
@@ -129,13 +130,17 @@ def generateTextualStyle(base16, settings):
 
 	file_path = 'files'
 
+	stylesettings_plist = 'styleSettings.plist'
+	stylesettings = readPlist(os.path.join(file_path, stylesettings_plist))
+	stylesettings['Underlying Window Color'] = '#%s' % base16.background_color
+	writePlist(stylesettings, os.path.join(settings_path, stylesettings_plist))
+
 	design_sass = read_file(os.path.join(file_path, 'design.sass'))
 	if not settings.default_irc_colors:
 		design_sass += read_file(os.path.join(file_path, 'irc_colors.sass'))
 	base16.write_sass(path, 'design.css', design_sass)
 
 	base16.write(path, 'copyright.txt', copyright_txt)
-	base16.write(settings_path, 'styleSettings.plist', stylesettings_plist)
 
 	files_to_copy = [
 		(path, 'scripts.js'),
@@ -330,37 +335,6 @@ Simplified Light original copyright:
 This style is a modified and stripped down version of
 the "Simplified" theme developed by "Cowboy" Ben Alman
 (http://benalman.com/). Copyright © 2010, 2011, 2012.
-"""
-
-stylesettings_plist = """\
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>Nickname Format</key>
-	<string></string>
-	<key>Timestamp Format</key>
-	<string></string>
-	<key>Override Channel Font</key>
-	<dict>
-		<key>Font Name</key>
-		<string></string>
-		<key>Font Size</key>
-		<integer>0</integer>
-	</dict>
-	<key>Indentation Offset</key>
-	<integer>6</integer>
-	<key>Underlying Window Color</key>
-	<string>#{base07}</string>
-	<key>Force Invert Sidebars</key>
-	<false/>
-	<key>Template Engine Versions</key>
-	<dict>
-		<key>default</key>
-		<integer>3</integer>
-	</dict>
-</dict>
-</plist>
 """
 
 if __name__ == '__main__': main()
