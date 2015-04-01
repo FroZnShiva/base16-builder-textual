@@ -142,11 +142,11 @@ def generateTextualStyle(base16, settings):
 		(template_path, 'encryptedMessageLock.mustache'),
 	]
 
+	if settings.preview:
+		files_to_copy.append((path, 'preview.htm'))
+
 	for destination, filename in files_to_copy:
 		copyFile(file_path, destination, filename)
-
-	if settings.preview:
-		base16.write(path, 'preview.html', preview_html)
 
 	print('  - %s' % path)
 
@@ -361,108 +361,6 @@ stylesettings_plist = """\
 	</dict>
 </dict>
 </plist>
-"""
-
-preview_html = """\
-<html viewtype="channel" dir="ltr">
-<head>
-	<title>{title}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" type="text/css" href="design.css">
-	<style type="text/css">
-		html, body, body[type], body {{
-			font-family: 'Menlo';
-			font-size: 9pt;
-		}}
-		body div#body_home p {{
-			margin-left: 78.24609375px;
-			text-indent: -78.24609375px;
-		}}
-		body .time {{
-			width: 78.24609375px;
-		}}
-		/* Print actions. */
-		@media print {{
-			#topic_bar {{
-				display: none;
-			}}
-		}}
-		/* Reserved lines. */
-		body div.line[command="-101"] .message {{
-			font-family: "Menlo" !important;
-		}}
-	</style>
-</head>
-<body viewtype="channel" dir="ltr">
-	<div id="loading_screen" style="opacity: 0; display: none;">View is Loading…</div>
-	<div id="body_home" style="opacity: 1;">
-		<div ltype="join" command="join" class="line event"><p>
-            <span class="time">[17:14:42]  </span>
-            <span class="message" ltype="join"><b>FroZnShiva</b> (user.example.com) joined the channel</span>
-        </p></div>
-		<div ltype="mode" command="mode" class="line event"><p>
-            <span class="time">[17:14:42]  </span>
-            <span class="message" ltype="mode"><b>irc.example.com</b> sets mode <b>+ntR</b></span>
-        </p></div>
-		<div ltype="mode" command="324" class="line event"><p>
-            <span class="time">[17:14:42]  </span>
-            <span class="message" ltype="mode">Mode is <b>+Rnt</b></span>
-        </p></div>
-		<div ltype="join" command="join" class="line event"><p>
-            <span class="time">[17:14:53]  </span>
-            <span class="message" ltype="join"><b>Chatter</b> (user.example.com) joined the channel</span>
-        </p></div>
-		<div ltype="kick" command="kick" class="line event"><p>
-            <span class="time">[17:15:04]  </span>
-            <span class="message" ltype="kick"><b>FroZnShiva</b> kicked <b>Chatter</b> from the channel (Lorem Ipsum)</span>
-        </p></div>
-		<div ltype="mode" command="mode" class="line event"><p>
-            <span class="time">[17:15:12]  </span>
-            <span class="message" ltype="mode"><b>FroZnShiva</b> sets mode <b>+i</b></span>
-        </p></div>
-		<div ltype="notice" command="notice" highlight="false" class="line text"><p>
-            <span class="time">[17:15:19]  </span>
-            <span class="message" ltype="notice"><span class="senderContainer"><span class="sender" mtype="normal" nickname="irc.example.com" colornumber="-1">-irc.example.com-</span></span>
-            <span class="innerMessage">[Knock] by Chatter!user.example.com (no reason specified)</span></span>
-        </p></div>
-		<div ltype="mode" command="mode" class="line event"><p>
-            <span class="time">[17:16:12]  </span>
-            <span class="message" ltype="mode"><b>FroZnShiva</b> sets mode <b>-i</b></span>
-        </p></div>
-		<div ltype="join" command="join" class="line event"><p>
-            <span class="time">[17:16:18]  </span>
-            <span class="message" ltype="join"><b>Chatter</b> (user.example.com) joined the channel</span>
-        </p></div>
-		<div ltype="privmsg" command="privmsg" highlight="false" class="line text"><p>
-            <span class="time">[17:16:21]  </span>
-            <span class="message" ltype="privmsg"><span class="senderContainer"><span class="sender" mtype="normal" nickname="Chatter" colornumber="12">&lt;Chatter&gt;</span></span>
-            <span class="innerMessage">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</span></span>
-        </p></div>
-		<div ltype="privmsg" command="privmsg" highlight="false" class="line text"><p>
-            <span class="time">[17:16:57]  </span>
-            <span class="message" ltype="privmsg"><span class="senderContainer"><span class="sender" mtype="normal" nickname="Chatter" colornumber="12">&lt;Chatter&gt;</span></span>
-            <span class="innerMessage">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</span></span>
-        </p></div>
-		<div ltype="privmsg" mtype="myself" command="privmsg" highlight="false" class="line text"><p>
-            <span class="time">[17:17:11]  </span>
-            <span class="message" ltype="privmsg"><span class="senderContainer"><span class="sender" mtype="myself" nickname="FroZnShiva" colornumber="2">&lt;@FroZnShiva&gt;</span></span>
-            <span class="innerMessage">Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</span></span>
-        </p></div>
-		<div id="mark"></div>
-		<div ltype="privmsg" command="privmsg" highlight="false" class="line text"><p>
-            <span class="time">[17:17:36]  </span>
-            <span class="message" ltype="privmsg"><span class="senderContainer"><span class="sender" mtype="normal" nickname="Chatter" colornumber="12">&lt;Chatter&gt;</span></span>
-            <span class="innerMessage">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipitlaboriosam, nisi ut aliquid ex ea commodi consequatur? laboriosam, nisi ut aliquid ex ea commodi consequatur?</span></span>
-        </p></div>
-		<div ltype="privmsg" command="privmsg" highlight="true" class="line text"><p>
-            <span class="time">[17:17:53]  </span>
-            <span class="message" ltype="privmsg"><span class="senderContainer"><span class="sender" mtype="normal" nickname="Chatter" colornumber="12">&lt;Chatter&gt;</span></span>
-            <span class="innerMessage">FroZnShiva: Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</span></span>
-        </p></div>
-	</div>
-	<div id="topic_bar" style="opacity: 0.95;">(No Topic)</div>
-</body>
-</html>
 """
 
 if __name__ == '__main__': main()
