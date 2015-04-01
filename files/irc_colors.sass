@@ -1,65 +1,25 @@
-.effect[color-number='0']
-	 color: $base07fixed !important
-.effect[color-number='1']
-	 color: $base00fixed !important
-.effect[color-number='2']
-	 color: $base0D !important
-.effect[color-number='3']
-	 color: $base0B !important
-.effect[color-number='4']
-	 color: rgba($base08r, $base08g, $base08b, 0.8) !important
-.effect[color-number='5']
-	 color: $base0F !important
-.effect[color-number='6']
-	 color: $base0E !important
-.effect[color-number='7']
-	 color: $base09 !important
-.effect[color-number='8']
-	 color: $base0A !important
-.effect[color-number='9']
-	 color: rgba($base0Br, $base0Bg, $base0Bb, 0.8) !important
-.effect[color-number='10']
-	 color: $base0C !important
-.effect[color-number='11']
-	 color: rgba($base0Cr, $base0Cg, $base0Cb, 0.8) !important
-.effect[color-number='12']
-	 color: rgba($base0Dr, $base0Dg, $base0Db, 0.8) !important
-.effect[color-number='13']
-	 color: rgba($base0Er, $base0Eg, $base0Eb, 0.8) !important
-.effect[color-number='14']
-	 color: $base02fixed !important
-.effect[color-number='15']
-	 color: $base05fixed !important
-.effect[bgcolor-number='0']
-	 background-color: $base07fixed !important
-.effect[bgcolor-number='1']
-	 background-color: $base00fixed !important
-.effect[bgcolor-number='2']
-	 background-color: $base0D !important
-.effect[bgcolor-number='3']
-	 background-color: $base0B !important
-.effect[bgcolor-number='4']
-	 background-color: rgba($base08r, $base08g, $base08b, 0.8) !important
-.effect[bgcolor-number='5']
-	 background-color: $base0F !important
-.effect[bgcolor-number='6']
-	 background-color: $base0E !important
-.effect[bgcolor-number='7']
-	 background-color: $base09 !important
-.effect[bgcolor-number='8']
-	 background-color: $base0A !important
-.effect[bgcolor-number='9']
-	 background-color: rgba($base0Br, $base0Bg, $base0Bb, 0.8) !important
-.effect[bgcolor-number='10']
-	 background-color: $base0C !important
-.effect[bgcolor-number='11']
-	 background-color: rgba($base0Cr, $base0Cg, $base0Cb, 0.8) !important
-.effect[bgcolor-number='12']
-	 background-color: rgba($base0Dr, $base0Dg, $base0Db, 0.8) !important
-.effect[bgcolor-number='13']
-	 background-color: rgba($base0Er, $base0Eg, $base0Eb, 0.8) !important
-.effect[bgcolor-number='14']
-	 background-color: $base02fixed !important
-.effect[bgcolor-number='15']
-	 background-color: $base05fixed !important
+$alpha: 0.8
 
+=irc_color($id, $color)
+	&[color-number='#{$id}']
+		color: $color !important
+	&[bgcolor-number='#{$id}']
+		background-color: $color !important
+
+.effect
+	+irc_color( 0, $base07fixed)
+	+irc_color( 1, $base00fixed)
+	+irc_color( 2, $base0D)
+	+irc_color( 3, $base0B)
+	+irc_color( 4, rgba($base08r, $base08g, $base08b, $alpha))
+	+irc_color( 5, $base0F)
+	+irc_color( 6, $base0E)
+	+irc_color( 7, $base09)
+	+irc_color( 8, $base0A)
+	+irc_color( 9, rgba($base0Br, $base0Bg, $base0Bb, $alpha))
+	+irc_color(10, $base0C)
+	+irc_color(11, rgba($base0Cr, $base0Cg, $base0Cb, $alpha))
+	+irc_color(12, rgba($base0Dr, $base0Dg, $base0Db, $alpha))
+	+irc_color(13, rgba($base0Er, $base0Eg, $base0Eb, $alpha))
+	+irc_color(14, $base02fixed)
+	+irc_color(15, $base05fixed)
