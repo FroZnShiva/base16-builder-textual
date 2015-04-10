@@ -268,6 +268,51 @@ body
 		content:"◦"
 		color: $base0C
 
+details
+	summary
+		cursor: pointer
+
+		&:hover
+			color: $base02
+
+		// Disable outlining by Safari (blue glow)
+		&:focus
+			outline: 0
+
+	&[gtype=general_user_events]
+		color: $base04
+		background-color: $base06hl
+
+		summary .message:before
+			content: "⇆"
+			color: $base0C
+
+		// Leaves only
+		&[joins='0']
+			summary .message:before
+				content: "↞"
+				color: $base08
+
+		// Joins only
+		&[parts="0"],
+		&[quits="0"]
+			summary .message:before
+				content: "↠"
+				color: $base0B
+
+		.group_body
+			margin-left: 3px
+			border-left: 1px dashed $base03
+
+			.line
+				padding-left: 1em
+
+		&[open]
+			.group_body,
+			.group_body .line
+				background-color: $base05hl
+
+
 =nick_color($id, $color)
 	&[colornumber='#{$id}']
 		color: $color

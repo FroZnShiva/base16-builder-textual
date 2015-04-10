@@ -56,6 +56,13 @@ def precalculate_transparency(color, alpha, background):
 	b = pc(blue(color), a, blue(background))
 	return '%02X%02X%02X' % (r, g, b)
 
+def js_bool(value):
+	assert(isinstance(value, bool))
+	return str(value).lower()
+
+def js_var(name, value):
+	return "var %s = %s;\n" % (name, value)
+
 class Base16:
 	def __init__(self, config, variant):
 		meta = config['meta']
@@ -160,8 +167,12 @@ def generateTextualStyle(base16, settings):
 
 	base16.write(path, 'copyright.txt', copyright_txt)
 
+	scripts_js = js_var('enableGrouping', js_bool(settings.enable_grouping))
+	scripts_js += js_var('expandNewGroups', js_bool(settings.expand_groups))
+	scripts_js += read_file(os.path.join(file_path, 'scripts.js'))
+	write_file(os.path.join(path, 'scripts.js'), scripts_js)
+
 	files_to_copy = [
-		(path, 'scripts.js'),
 		(template_path, 'encryptedMessageLock.mustache'),
 	]
 
@@ -276,6 +287,27 @@ def B16TArgumentParser():
 		default = 20,
 	)
 	parser.add_argument(
+		'--disable-grouping',
+		help = """
+			Disable the grouping feature. If not disabled some messages will be
+			grouped, like joins, parts, quits and nick changes. The grouped
+			messages can still be expanded so that grouping will not result in
+			less information being displayed. New groups will be collapsed by
+			default unless you also specify --expand-groups.
+		""",
+		action = 'store_true',
+		default = False,
+	)
+	parser.add_argument(
+		'--expand-groups',
+		help = """
+			If this option is set new groups will be expanded by default. This
+			only has an effect if grouping is enabled.
+		""",
+		action = 'store_true',
+		default = False,
+	)
+	parser.add_argument(
 		'-s', '--scheme',
 		help = """
 			Generate the style for a given scheme only. If this option is not
@@ -330,6 +362,8 @@ def main():
 	settings.light = args.light or neither
 	settings.dark = args.dark or neither
 	settings.background_opacity = args.background_opacity
+	settings.enable_grouping = not args.disable_grouping
+	settings.expand_groups = args.expand_groups
 
 	if args.scheme:
 		scheme = os.path.expanduser(args.scheme)
