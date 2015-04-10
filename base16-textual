@@ -48,7 +48,7 @@ class Base16:
 		self.scheme = '%s %s' % (meta['scheme'], variant)
 		self.title = 'Base16 %s' % self.scheme
 		self.background_opacity = config.background_opacity
-		self.background_color = self.colors[self.color_variant('base07')]
+		self.background = self.colors[self.color_variant('base07')]
 
 	def color_variant(self, color):
 		lvariant = self.variant.lower()
@@ -132,7 +132,7 @@ def generateTextualStyle(base16, settings):
 
 	stylesettings_plist = 'styleSettings.plist'
 	stylesettings = readPlist(os.path.join(file_path, stylesettings_plist))
-	stylesettings['Underlying Window Color'] = '#%s' % base16.background_color
+	stylesettings['Underlying Window Color'] = '#%s' % base16.background
 	writePlist(stylesettings, os.path.join(settings_path, stylesettings_plist))
 
 	design_sass = read_file(os.path.join(file_path, 'design.sass'))
