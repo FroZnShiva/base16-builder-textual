@@ -39,6 +39,15 @@ def write_file(filename, data):
 	f.write(data)
 	f.close()
 
+def red(x):
+	return int(x[0:2], 16)
+
+def green(x):
+	return int(x[2:4], 16)
+
+def blue(x):
+	return int(x[4:6], 16)
+
 class Base16:
 	def __init__(self, config, variant):
 		meta = config['meta']
@@ -72,10 +81,6 @@ class Base16:
 		)
 
 	def sass_header(self):
-		r = lambda x: int(x[0:2], 16)
-		g = lambda x: int(x[2:4], 16)
-		b = lambda x: int(x[4:6], 16)
-
 		result = '$bgalpha: %s\n' % self.background_opacity
 		for key in self.colors:
 			if key == '__name__': continue
@@ -87,9 +92,9 @@ class Base16:
 				result += '$%sfixed: #%s\n' % (key, value)
 			else:
 				result += '$%s: #%s\n' % (key, value)
-			result += '$%sr: %s\n' % (key, r(value))
-			result += '$%sg: %s\n' % (key, g(value))
-			result += '$%sb: %s\n' % (key, b(value))
+			result += '$%sr: %s\n' % (key, red(value))
+			result += '$%sg: %s\n' % (key, green(value))
+			result += '$%sb: %s\n' % (key, blue(value))
 		return result
 
 	def write(self, path, filename, data):
