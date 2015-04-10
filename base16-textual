@@ -56,9 +56,17 @@ def precalculate_transparency(color, alpha, background):
 	b = pc(blue(color), a, blue(background))
 	return '%02X%02X%02X' % (r, g, b)
 
+def js_str(value):
+	return '"%s"' % str(value)
+
 def js_bool(value):
 	assert(isinstance(value, bool))
 	return str(value).lower()
+
+def js_list(values, value_to_js):
+	if not values:
+		return 'undefined'
+	return '[%s]' % ','.join(map(value_to_js, values))
 
 def js_var(name, value):
 	return "var %s = %s;\n" % (name, value)
@@ -169,6 +177,8 @@ def generateTextualStyle(base16, settings):
 
 	scripts_js = js_var('enableGrouping', js_bool(settings.enable_grouping))
 	scripts_js += js_var('expandNewGroups', js_bool(settings.expand_groups))
+	scripts_js += js_var('groupingInclude', js_list(settings.grouping_include, js_str))
+	scripts_js += js_var('groupingExclude', js_list(settings.grouping_exclude, js_str))
 	scripts_js += read_file(os.path.join(file_path, 'scripts.js'))
 	write_file(os.path.join(path, 'scripts.js'), scripts_js)
 
@@ -239,6 +249,14 @@ def B16TArgumentParser():
 			raise ArgumentTypeError(msg)
 		return value
 
+	def chanlist(arg):
+		values = arg.split(',')
+		for value in values:
+			if not value.startswith('#') or ' ' in value:
+				msg = "%r is an invalid channel list" % arg
+				raise ArgumentTypeError(msg)
+		return values
+
 	parser = ArgumentParser(
 		description = """
 			This is a script which generates styles for the Textual IRC client
@@ -262,6 +280,27 @@ def B16TArgumentParser():
 		""",
 		action = 'store_true',
 		default = False,
+	)
+	grouping_channels = parser.add_mutually_exclusive_group()
+	grouping_channels.add_argument(
+		'--grouping-include',
+		help = """
+			Specify channels for which the grouping shall be enabled. All other
+			channels will have no grouping. The argument is a comma-separated
+			list (without spaces).
+		""",
+		type = chanlist,
+		action = 'store',
+	)
+	grouping_channels.add_argument(
+		'--grouping-exclude',
+		help = """
+			Specify channels for which the grouping shall be disabled. All other
+			channels will have grouping enabled.. The argument is a
+			comma-separated list (without spaces).
+		""",
+		type = chanlist,
+		action = 'store',
 	)
 	parser.add_argument(
 		'--default-irc-colors',
@@ -364,6 +403,8 @@ def main():
 	settings.background_opacity = args.background_opacity
 	settings.enable_grouping = not args.disable_grouping
 	settings.expand_groups = args.expand_groups
+	settings.grouping_include = args.grouping_include
+	settings.grouping_exclude = args.grouping_exclude
 
 	if args.scheme:
 		scheme = os.path.expanduser(args.scheme)

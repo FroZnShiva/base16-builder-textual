@@ -2,6 +2,12 @@
 
 var mappedSelectedUsers = new Array();
 var groupCount = 0;
+var currentChannel = undefined;
+
+Textual.viewInitiated = function(viewType, serverHash, channelHash, channelName)
+{
+	currentChannel = (viewType == 'channel') ? channelName : undefined
+}
 
 Textual.viewBodyDidLoad = function()
 {
@@ -17,6 +23,14 @@ Textual.newMessagePostedToView = function(line)
 	var element = document.getElementById("line-" + line);
 
 	updateNicknameAssociatedWithNewMessage(element);
+
+	if (enableGrouping && currentChannel) {
+		if (groupingInclude) {
+			enableGrouping = groupingInclude.indexOf(currentChannel) != -1;
+		} else if (groupingExclude) {
+			enableGrouping = groupingExclude.indexOf(currentChannel) == -1;
+		}
+	}
 
 	if (enableGrouping) {
 		groupGeneralUserEvents(element);
