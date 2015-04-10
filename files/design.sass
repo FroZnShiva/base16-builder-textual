@@ -19,7 +19,7 @@ body
 div
 	// Dye background in a fixed color, same color as in .sender[mtype*=myself]
 	&[mtype*=myself]
-		background-color: rgba($base0Dr, $base0Dg, $base0Db, $bgalpha)
+		background-color: $base0Dhl
 
 	// Marker line
 	&[id=mark]
@@ -168,7 +168,7 @@ html
 	&[ltype*=wallops]
 		color: $base0A
 		z-index: 191
-		background-color: rgba($base0Ar, $base0Ag, $base0Ab, $bgalpha)
+		background-color: $base0Ahl
 		position: relative
 
 	&[ltype*=privmsg],
@@ -180,7 +180,7 @@ html
 		transition: background-color 0.5s
 		z-index: 190
 		position: relative
-		background-color: rgba($base09r, $base09g, $base09b, $bgalpha)
+		background-color: $base09hl
 
 	&[ltype*=privmsg],
 	&[ltype*=action]
@@ -188,7 +188,7 @@ html
 			z-index: 191
 			position: relative
 			font-weight: normal
-			background-color: rgba($base08r, $base08g, $base08b, $bgalpha)
+			background-color: $base08hl
 
 div
 	&[ltype*=privmsg] .sender
@@ -244,14 +244,14 @@ body
 	&[ltype*=topic],
 	&[ltype*=website]
 		color: $base04
-		background-color: rgba($base06r, $base06g, $base06b, $bgalpha)
+		background-color: $base06hl
 
 	// More interesting events
 	&[ltype*=kick],
 	&[ltype*=kill],
 	&[ltype*=mode][command=mode]
 		color: $base02
-		background-color: rgba($base06r, $base06g, $base06b, $bgalpha)
+		background-color: $base06hl
 
 	&[ltype*=join] .message:before
 		content: "→"

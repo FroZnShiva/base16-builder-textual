@@ -48,6 +48,14 @@ def green(x):
 def blue(x):
 	return int(x[4:6], 16)
 
+def precalculate_transparency(color, alpha, background):
+	pc = lambda c, a, back: (c * a) + (back * (1 - a))
+	a = alpha / 100.0
+	r = pc(red(color), a, red(background))
+	g = pc(green(color), a, green(background))
+	b = pc(blue(color), a, blue(background))
+	return '%02X%02X%02X' % (r, g, b)
+
 class Base16:
 	def __init__(self, config, variant):
 		meta = config['meta']
@@ -81,7 +89,7 @@ class Base16:
 		)
 
 	def sass_header(self):
-		result = '$bgalpha: %s\n' % self.background_opacity
+		result = '$hlalpha: %s\n' % self.background_opacity
 		for key in self.colors:
 			if key == '__name__': continue
 			value = self.colors[key]
@@ -95,6 +103,11 @@ class Base16:
 			result += '$%sr: %s\n' % (key, red(value))
 			result += '$%sg: %s\n' % (key, green(value))
 			result += '$%sb: %s\n' % (key, blue(value))
+			hl = precalculate_transparency(value, self.background_opacity, self.background)
+			result += '$%shl: #%s\n' % (key, hl)
+			for i in range(100):
+				color = precalculate_transparency(value, i, self.background)
+				result += '$%sa%02d: #%s\n' % (key, i, color)
 		return result
 
 	def write(self, path, filename, data):
@@ -213,7 +226,7 @@ def B16TArgumentParser():
 		if not (0 <= value <= 100):
 			msg = "%r needs to be a value between 0 and 100" % arg
 			raise ArgumentTypeError(msg)
-		return value / 100.0
+		return value
 
 	parser = ArgumentParser(
 		description = """
@@ -260,7 +273,7 @@ def B16TArgumentParser():
 		""",
 		type = percentage,
 		action = 'store',
-		default = 0.2,
+		default = 20,
 	)
 	parser.add_argument(
 		'-s', '--scheme',
