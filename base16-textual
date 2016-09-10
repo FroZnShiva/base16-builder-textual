@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import os
@@ -6,7 +6,7 @@ import sys
 import shutil
 import re
 from argparse import ArgumentParser, ArgumentTypeError
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from plistlib import writePlist, readPlist
 
 def printerror(msg):
@@ -58,7 +58,7 @@ def precalculate_transparency(color, alpha, background):
 	r = pc(red(color), a, red(background))
 	g = pc(green(color), a, green(background))
 	b = pc(blue(color), a, blue(background))
-	return '%02X%02X%02X' % (r, g, b)
+	return '%02X%02X%02X' % (int(r), int(g), int(b))
 
 def js_str(value):
 	return '"%s"' % str(value)
@@ -138,8 +138,11 @@ class Base16:
 		# detection is based on the file extension.
 		tmp = os.path.join(path, 'tmp_' + os.path.basename(filename) + '.sass')
 		write_file(tmp, data)
-		css = sass.compile_file(tmp, output_style = sass.SASS_STYLE_COMPRESSED)
-		write_file(os.path.join(path, filename), css)
+		css = sass.compile_file(
+			tmp.encode(),
+			output_style = sass.SASS_STYLE_COMPRESSED
+		)
+		write_file(os.path.join(path, filename), css.decode())
 		os.remove(tmp)
 
 class Settings:

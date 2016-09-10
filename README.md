@@ -9,6 +9,7 @@ You can also see previews of the styles there.
 
 ## Requirements
 
+* Python 3
 * [python-scss](https://github.com/pistolero/python-scss)
 ```sh
 pip install sass
