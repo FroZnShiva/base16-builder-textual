@@ -219,6 +219,12 @@ function decorateGroup(group)
 			title = name
 
 		var value = Number(group.getAttribute(name + "s"));
+		if (value == 0)
+			return undefined;
+
+		if (title == "nick")
+			title = "nick change"
+
 		return value + " " + (value == 1 ? title : title + "s");
 	}
 
@@ -228,10 +234,13 @@ function decorateGroup(group)
 	var text = message.firstChild;
 
 	if (gtype == "general_user_events") {
-		text.textContent = " " +
-			stringifyValue("join") + ", " +
-			stringifyValue("part") + ", " +
-			stringifyValue("quit") + " and " +
-			stringifyValue("nick", "nick change");
+		types = ["join", "part", "quit", "nick"];
+		contents = new Array();
+		for (var i in types) {
+			var value = stringifyValue(types[i])
+			if (value)
+				contents.push(value)
+		}
+		text.textContent = " " + contents.join(", ");
 	}
 }
