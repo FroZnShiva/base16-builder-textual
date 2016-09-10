@@ -150,6 +150,10 @@ class Settings:
 		'light',
 		'dark',
 		'background_opacity',
+		'enable_grouping',
+		'expand_groups',
+		'grouping_include',
+		'grouping_exclude',
 	]
 
 def generateTextualStyle(base16, settings):
