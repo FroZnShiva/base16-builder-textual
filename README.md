@@ -38,9 +38,28 @@ If you want to install the files directly for Textual, you can ran **one** of th
 ./base16-textual --install-mas # For the MAS version
 ```
 
-## Features
-
-See available features by viewing the integrated help:
+See available configuration options by viewing the integrated help:
 ```sh
 ./base16-textual --help
 ```
+
+### Grouping
+
+By default joins, quits, parts, and nick changes will be grouped. Each group can be expanded or collapsed by clicking on the arrow.
+
+![Feature: Grouping](https://github.com/FroZnShiva/base16-builder-textual/raw/master/feature-previews/grouping.png)
+
+You can disable this feature by passing:
+
+```sh
+./base16-textual --disable-grouping
+```
+
+You can pass a comma-separated list of channels that are either included or excluded by the grouping feature, be passing one of the following options:
+
+```sh
+./base16-textual --grouping-exclude "#channel1,channel2"
+# or
+./base16-textual --grouping-include "#channel1,channel2"
+```
+
