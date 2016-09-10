@@ -212,11 +212,11 @@ def B16TConfigParser(configfile):
 		fatal("Missing config file: '%s'" % configfile)
 
 	required_options = {
-		'meta' : [
+		'meta': [
 			'author',
 			'scheme',
 		],
-		'base16' : [
+		'base16': [
 			'base00', 'base01', 'base02', 'base03',
 			'base04', 'base05', 'base06', 'base07',
 			'base08', 'base09', 'base0A', 'base0B',
