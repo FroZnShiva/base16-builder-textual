@@ -119,6 +119,8 @@ class Base16:
 				result += '$%sfixed: #%s\n' % (key, value)
 			else:
 				result += '$%s: #%s\n' % (key, value)
+			if variant:
+				value = self.colors[variant]
 			result += '$%sr: %s\n' % (key, red(value))
 			result += '$%sg: %s\n' % (key, green(value))
 			result += '$%sb: %s\n' % (key, blue(value))
