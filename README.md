@@ -29,6 +29,13 @@ Generate the styles by running:
 ```
 The styles are stored in the `output` directory by default.
 
+If you want to install the files directly for Textual, you can ran **one** of the following commands depending if you have installed the application via the Mac App Store (MAS) or any other way:
+
+```sh
+./base16-textual --install     # For the non-MAS version
+./base16-textual --install-mas # For the MAS version
+```
+
 ## Features
 
 See available features by viewing the integrated help:
