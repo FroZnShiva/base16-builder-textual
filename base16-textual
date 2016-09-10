@@ -5,7 +5,6 @@ import os
 import sys
 import shutil
 import re
-import sass
 from argparse import ArgumentParser, ArgumentTypeError
 from ConfigParser import SafeConfigParser
 from plistlib import writePlist, readPlist
@@ -16,6 +15,11 @@ def printerror(msg):
 def fatal(msg, exitcode = 1):
 	printerror(msg)
 	exit(exitcode)
+
+try:
+	import sass
+except ImportError:
+	fatal("Module 'sass' is not installed, try installing it with 'pip install sass'.")
 
 def iterateFiles(path, callback, context = None):
 	for subdir, dirs, files in os.walk(path):
