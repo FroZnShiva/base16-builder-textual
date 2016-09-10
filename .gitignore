@@ -1,2 +1,5 @@
 # Ignore generated styles
 output/*
+
+# Vim
+*.swp
