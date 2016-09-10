@@ -313,7 +313,7 @@ def B16TArgumentParser():
 		'--grouping-exclude',
 		help = """
 			Specify channels for which the grouping shall be disabled. All other
-			channels will have grouping enabled.. The argument is a
+			channels will have grouping enabled. The argument is a
 			comma-separated list (without spaces).
 		""",
 		type = chanlist,
