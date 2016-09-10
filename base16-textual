@@ -200,7 +200,11 @@ def generateTextualStyle(base16, settings):
 	]
 
 	if settings.preview:
-		files_to_copy.append((path, 'preview.htm'))
+		with open(os.path.join(file_path, 'preview.htm'), 'r') as f:
+			preview = f.read()
+		preview = preview.replace("__TITLE__", base16.title)
+		with open(os.path.join(path, 'preview.htm'), 'w') as f:
+			f.write(preview)
 
 	for destination, filename in files_to_copy:
 		copyFile(file_path, destination, filename)
