@@ -340,7 +340,7 @@ def B16TArgumentParser():
 		""",
 		type = percentage,
 		action = 'store',
-		default = 20,
+		default = 15,
 	)
 	parser.add_argument(
 		'--disable-grouping',
