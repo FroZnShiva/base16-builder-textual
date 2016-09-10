@@ -363,12 +363,29 @@ def B16TArgumentParser():
 		""",
 		action = 'store',
 	)
-	parser.add_argument(
+	installGrp = parser.add_mutually_exclusive_group()
+	installGrp.add_argument(
 		'-i', '--install',
 		help = """
 			This installs the generated style(s) directly into the location
 			where the Textual styles are stored. If this is not set, the
 			generated styles will be stored in the 'output' subdirectory.
+			Only use this if you have *not* installed Textual via the Mac App
+			Store (MAS). If you have installted Textual via MAS use
+			'--install-mas'.
+		""",
+		action = 'store_true',
+		default = False,
+	)
+	installGrp.add_argument(
+		'--install-mas',
+		help = """
+			This installs the generated style(s) directly into the location
+			where the Textual styles are stored. If this is not set, the
+			generated styles will be stored in the 'output' subdirectory.
+			Only use this if you have installed Textual via the Mac App Store
+			(MAS). If you have not installed Textual via MAS use '--install' or
+			the shorthand '-i'.
 		""",
 		action = 'store_true',
 		default = False,
@@ -390,13 +407,16 @@ def main():
 
 	output_path = 'output'
 	config_path = 'schemes'
-	install_path = os.path.expanduser('~/Library/Group Containers/8482Q6EPL6.com.codeux.irc.textual/Library/Application Support/Textual/Styles')
+	mas_install_path = os.path.expanduser('~/Library/Group Containers/8482Q6EPL6.com.codeux.irc.textual/Library/Application Support/Textual/Styles')
+	install_path = os.path.expanduser('~/Library/Group Containers/com.codeux.apps.textual/Library/Application Support/Textual/Styles')
 
 	if not os.path.exists(config_path):
 		fatal('Missing configuration files, please run the base16 command first.')
 
 	if args.install:
 		output_path = install_path
+	elif args.install_mas:
+		output_path = mas_install_path
 
 	if not os.path.exists(output_path):
 		os.makedirs(output_path)
