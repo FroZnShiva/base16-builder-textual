@@ -55,7 +55,7 @@ You can disable this feature by passing:
 ./base16-textual --disable-grouping
 ```
 
-You can pass a comma-separated list of channels that are either included or excluded by the grouping feature, be passing one of the following options:
+You can pass a comma-separated list of channels that are either included or excluded by the grouping feature, by passing one of the following options:
 
 ```sh
 ./base16-textual --grouping-exclude "#channel1,channel2"
